@@ -20,6 +20,8 @@ const Main = () => {
       });
 
       dispatch(actions.addChannels(response.data));
+      dispatch(actions.setCurrentChannel('1'))
+      console.log(response.data)
     };
     fetchData();
   }, []);
