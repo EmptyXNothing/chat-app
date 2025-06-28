@@ -3,9 +3,11 @@ import { UserContext } from '../Contexts/UserProvider.jsx';
 import { useContext, useEffect } from 'react';
 import Channels from '../components/Channels.jsx';
 import axios from 'axios';
-import { actions } from '../slices/channelsSlice.js';
+import { actions as channelsActions } from '../slices/channelsSlice.js';
+import { actions as messagesActions } from '../slices/messagesSlice.js';
 import { useDispatch } from 'react-redux';
 import MessagesForm from '../components/MessagesForm.jsx';
+import Messages from '../components/Messages.jsx';
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -13,15 +15,22 @@ const Main = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('/api/v1/channels', {
+      const channelsResponse = await axios.get('/api/v1/channels', {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
 
-      dispatch(actions.addChannels(response.data));
-      dispatch(actions.setCurrentChannel('1'))
-      console.log(response.data)
+      const messagesResponse = await axios.get('/api/v1/messages', {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      dispatch(channelsActions.addChannels(channelsResponse.data));
+      dispatch(channelsActions.setCurrentChannel('1'));
+      dispatch(messagesActions.addMessages(messagesResponse.data));
+      console.log(messagesResponse.data)
     };
     fetchData();
   }, []);
@@ -29,6 +38,7 @@ const Main = () => {
     <div className="main-content">
       <Channels />
       <div className="chat">
+        <Messages />
         <MessagesForm />
       </div>
     </div>
