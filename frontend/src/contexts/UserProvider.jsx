@@ -15,10 +15,13 @@ const UserProvider = (props) => {
     setUser(() => null)
   }
 
+  const headers = { Authorization: `Bearer ${user.token}` }
+
   const value = {
     user,
     logIn,
     logOut,
+    headers,
   };
 
   return (

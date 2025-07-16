@@ -1,21 +1,26 @@
 import '../styles/App.css';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { UserContext } from '../Contexts/UserProvider.jsx';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 const MessagesForm = () => {
   const { currentChannelId } = useSelector((state) => state.channels);
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext);
   const [input, setInput] = useState('');
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [currentChannelId]);
 
   const handleInput = (e) => {
     setInput(() => e.target.value);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const newMessage = {
       body: input,
       channelId: currentChannelId,
@@ -28,13 +33,19 @@ const MessagesForm = () => {
         },
       })
       .then((response) => {
-        console.log(response.data); 
+        console.log(response.data);
       });
+    setInput(() => '');
   };
   return (
     <div className="messages-form">
       <form onSubmit={handleSubmit}>
-        <input type="text" onChange={handleInput} value={input}></input>
+        <input
+          type="text"
+          onChange={handleInput}
+          value={input}
+          ref={inputRef}
+        ></input>
         <button type="sumbit">Send</button>
       </form>
     </div>

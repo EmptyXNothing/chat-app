@@ -8,29 +8,35 @@ import { actions as messagesActions } from '../slices/messagesSlice.js';
 import { useDispatch } from 'react-redux';
 import MessagesForm from '../components/MessagesForm.jsx';
 import Messages from '../components/Messages.jsx';
+import { io } from "socket.io-client";
 
 const Main = () => {
   const dispatch = useDispatch();
-  const { user } = useContext(UserContext);
+  const { headers } = useContext(UserContext);
+  const socket = io();
 
   useEffect(() => {
     const fetchData = async () => {
-      const channelsResponse = await axios.get('/api/v1/channels', {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      try {
+        socket.timeout(5000).on('newMessage', (arg) => {
+          dispatch(messagesActions.addMessage(arg));
+        });
 
-      const messagesResponse = await axios.get('/api/v1/messages', {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+        const channelsResponse = await axios.get('/api/v1/channels', {
+          headers: headers,
+        });
 
-      dispatch(channelsActions.addChannels(channelsResponse.data));
-      dispatch(channelsActions.setCurrentChannel('1'));
-      dispatch(messagesActions.addMessages(messagesResponse.data));
-      console.log(messagesResponse.data)
+        const messagesResponse = await axios.get('/api/v1/messages', {
+          headers: headers,
+        });
+
+        dispatch(channelsActions.addChannels(channelsResponse.data));
+        dispatch(channelsActions.setCurrentChannel('1'));
+        dispatch(messagesActions.addMessages(messagesResponse.data));
+        console.log(messagesResponse.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchData();
   }, []);
