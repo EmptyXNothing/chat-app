@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import MessagesForm from '../components/MessagesForm.jsx';
 import Messages from '../components/Messages.jsx';
 import { io } from "socket.io-client";
+import ModalWindow from '../components/ModalWindow.jsx'
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ const Main = () => {
         <Messages />
         <MessagesForm />
       </div>
+      <ModalWindow />
     </div>
   );
 };
