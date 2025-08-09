@@ -1,17 +1,21 @@
 import '../styles/App.css';
 import Channel from './Channel';
-import { useSelector } from 'react-redux';
-import { selectors } from '../slices/channelsSlice'
-import AddIcon from '../assets/add.svg'
+import { openModal } from '../slices/modalSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectors } from '../slices/channelsSlice';
+import AddIcon from '../assets/add.svg';
 
 const Channels = () => {
-  const channels = useSelector(selectors.selectAll)
+  const dispatch = useDispatch();
+  const channels = useSelector(selectors.selectAll);
 
   return (
     <div className="channels">
-      <div className='channels-header'>
+      <div className="channels-header">
         <h3>Channels</h3>
-        <button ><img src={AddIcon} alt="+" /></button>
+        <button onClick={() => dispatch(openModal())}>
+          <img src={AddIcon} alt="add channel" />
+        </button>
       </div>
       {channels.map((channel) => (
         <Channel channel={channel} />

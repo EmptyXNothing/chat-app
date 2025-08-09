@@ -50,7 +50,7 @@
 .channel {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0.5em;
 }
 
@@ -99,4 +99,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.channel-buttons {
+  display: flex;
+  gap: 0.3em;
 }

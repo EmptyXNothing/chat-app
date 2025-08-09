@@ -23,6 +23,16 @@ const Main = () => {
           dispatch(messagesActions.addMessage(arg));
         });
 
+        socket.timeout(3000).on('newChannel', (arg) => {
+          console.log(arg)
+          dispatch(channelsActions.addChannel(arg));
+        });
+
+        socket.timeout(3000).on('removeChannel', ({ id }) => {
+          console.log(id)
+          dispatch(channelsActions.removeChannel(id));
+        });
+
         const channelsResponse = await axios.get('/api/v1/channels', {
           headers: headers,
         });
@@ -34,7 +44,6 @@ const Main = () => {
         dispatch(channelsActions.addChannels(channelsResponse.data));
         dispatch(channelsActions.setCurrentChannel('1'));
         dispatch(messagesActions.addMessages(messagesResponse.data));
-        console.log(messagesResponse.data);
       } catch (error) {
         console.log(error);
       }

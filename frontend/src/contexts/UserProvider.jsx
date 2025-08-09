@@ -3,19 +3,19 @@ import { createContext, useState } from 'react';
 export const UserContext = createContext();
 
 const UserProvider = (props) => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
 
   const logIn = (data) => {
-    localStorage.setItem("user", JSON.stringify(data))
-    setUser(() => data)
-  }
+    localStorage.setItem('user', JSON.stringify(data));
+    setUser(() => data);
+  };
 
   const logOut = () => {
-    localStorage.removeItem("user")
-    setUser(() => null)
-  }
+    localStorage.removeItem('user');
+    setUser(() => null);
+  };
 
-  const headers = { Authorization: `Bearer ${user.token}` }
+  const headers = user ? { Authorization: `Bearer ${user.token}` } : null;
 
   const value = {
     user,
@@ -25,9 +25,7 @@ const UserProvider = (props) => {
   };
 
   return (
-    <UserContext.Provider value={value}>
-      {props.children}
-    </UserContext.Provider>
+    <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
   );
 };
 
