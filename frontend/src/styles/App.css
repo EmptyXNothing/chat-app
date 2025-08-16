@@ -105,3 +105,12 @@
   display: flex;
   gap: 0.3em;
 }
+
+.edit-channel-name-form h2 {
+  color: #1a1a1a;
+}
+
+.channel-name {
+  width: 100%;
+  height: 10%;
+}

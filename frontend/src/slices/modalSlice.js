@@ -2,16 +2,25 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   visible: false,
-}
+  type: null,
+  data: null,
+};
 const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
     openModal(state, { payload }) {
-      state.visible = true
+      const { type, data } = payload;
+      if (data) {
+        state.data = data;
+      }
+      state.type = type;
+      state.visible = true;
     },
-    closeModal(state, { payload }) {
-      state.visible = false
+    closeModal(state) {
+      state.type = null;
+      state.visible = false;
+      state.data = null;
     },
   },
 });

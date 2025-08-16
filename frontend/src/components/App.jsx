@@ -1,7 +1,7 @@
 import '../styles/App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import Login from '../pages/Login.jsx';
-import UserProvider, { UserContext } from '../Contexts/UserProvider.jsx';
+import UserProvider, { UserContext } from '../contexts/UserProvider.jsx';
 import Main from '../pages/Main.jsx';
 import { useContext } from 'react';
 import Header from '../components/Header.jsx';

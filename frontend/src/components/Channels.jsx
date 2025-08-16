@@ -13,7 +13,7 @@ const Channels = () => {
     <div className="channels">
       <div className="channels-header">
         <h3>Channels</h3>
-        <button onClick={() => dispatch(openModal())}>
+        <button onClick={() => dispatch(openModal({type: 'addChannel'}))}>
           <img src={AddIcon} alt="add channel" />
         </button>
       </div>

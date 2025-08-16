@@ -2,7 +2,7 @@ import '../styles/App.css';
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { UserContext } from '../Contexts/UserProvider.jsx';
+import { UserContext } from '../contexts/UserProvider.jsx';
 import { useContext, useEffect } from 'react';
 
 const MessagesForm = () => {
@@ -43,6 +43,7 @@ const MessagesForm = () => {
         <input
           type="text"
           onChange={handleInput}
+          autoComplete="off"
           value={input}
           ref={inputRef}
         ></input>
