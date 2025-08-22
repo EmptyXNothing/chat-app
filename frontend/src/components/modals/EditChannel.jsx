@@ -3,12 +3,14 @@ import { useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from '../../contexts/UserProvider.jsx';
 import axios from 'axios';
+import ERRORS from '../../errors.js';
 
 const EditChannelModal = () => {
   const dispatch = useDispatch();
   const [input, setInput] = useState('');
+  const [error, setError] = useState(null);
   const { headers } = useContext(UserContext);
-  const { data } = useSelector((state) => state.modal)
+  const { data } = useSelector((state) => state.modal);
 
   const handleInput = (e) => {
     setInput(() => e.target.value);
@@ -16,28 +18,45 @@ const EditChannelModal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const editedChannel = { name: input };
-    axios.patch(`/api/v1/channels/${data.id}`, editedChannel, {
-      headers,
-    });
-    setInput(() => '');
-    dispatch(closeModal());
+    if (input.length === 0) {
+      setError(() => ERRORS.empty);
+      return;
+    }
+    if (input.length > 30) {
+      setError(() => ERRORS.overfull);
+      return;
+    }
+    try {
+      const editedChannel = { name: input };
+      await axios.patch(`/api/v1/channels/${data.id}`, editedChannel, {
+        headers,
+      });
+      setInput(() => '');
+      dispatch(closeModal());
+    } catch (e) {
+      setError(() => e.message);
+    }
   };
 
   return (
-      <div className="edit-channel-name-form">
-        <form onSubmit={handleSubmit}>
-          <h2>{data.name}</h2>
-          <input
-            type="text"
-            onChange={handleInput}
-            value={input}
-            ref={(input) => input?.focus()}
-            placeholder="Channel name"
-          ></input>
-          <button type="sumbit">Submit</button>
-        </form>
-      </div>
+    <div className="edit-channel-name-form">
+      <form onSubmit={handleSubmit}>
+        <h2>{data.name}</h2>
+        <div className="form-content">
+          <div className="flex">
+            <input
+              type="text"
+              onChange={handleInput}
+              value={input}
+              ref={(input) => input?.focus()}
+              placeholder="Channel name"
+            />
+            <button type="sumbit">Submit</button>
+          </div>
+          {error && <div className="validation">{error}</div>}
+        </div>
+      </form>
+    </div>
   );
 };
 
