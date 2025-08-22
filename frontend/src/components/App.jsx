@@ -5,10 +5,16 @@ import UserProvider, { UserContext } from '../contexts/UserProvider.jsx';
 import Main from '../pages/Main.jsx';
 import { useContext } from 'react';
 import Header from '../components/Header.jsx';
+import SignUp from '../pages/SignUp.jsx';
 
-const PrivateRoute = ({ children }) => {
+const MainPrivateRoute = ({ children }) => {
   const { user } = useContext(UserContext);
   return user ? children : <Navigate to="/login" />;
+};
+
+const AuthenticationPrivateRoute = ({ children }) => {
+  const { user } = useContext(UserContext);
+  return user ? <Navigate to="/" /> : children;
 };
 
 const App = () => {
@@ -22,12 +28,27 @@ const App = () => {
               <Route
                 path="/"
                 element={
-                  <PrivateRoute>
+                  <MainPrivateRoute>
                     <Main />
-                  </PrivateRoute>
+                  </MainPrivateRoute>
                 }
               />
-              <Route path="/login" element={<Login />} />
+              <Route
+                path="/signup"
+                element={
+                  <AuthenticationPrivateRoute>
+                    <SignUp />
+                  </AuthenticationPrivateRoute>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <AuthenticationPrivateRoute>
+                    <Login />
+                  </AuthenticationPrivateRoute>
+                }
+              />
 
               <Route path="*" element={<h1>Такой страницы нет!</h1>} />
             </Routes>

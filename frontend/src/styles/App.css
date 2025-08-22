@@ -110,7 +110,23 @@
   color: #1a1a1a;
 }
 
+.edit-channel-name-form, .add-channel-name-form {
+  height: auto;
+}
+
 .channel-name {
   width: 100%;
-  height: 10%;
+}
+
+.validation {
+  color: red;
+}
+
+.flex {
+  display: flex;
+}
+
+.modal {
+  height: 100%;
+
 }

@@ -1,5 +1,5 @@
 import '../styles/App.css';
-import { UserContext } from '../Contexts/UserProvider.jsx';
+import { UserContext } from '../contexts/UserProvider.jsx';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 

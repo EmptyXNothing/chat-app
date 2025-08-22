@@ -25,9 +25,10 @@ const Channel = (props) => {
           headers,
         });
         if (currentChannelId === channel.id) {
-          console.log(channels)
-          dispatch(actions.setCurrentChannel('1'));
-          dispatch(actions.setCurrentChannelName(channels[0].name));
+          const firstChannel = channels[0]
+          const { id, name } = firstChannel
+          dispatch(actions.setCurrentChannel(id));
+          dispatch(actions.setCurrentChannelName(name));
         }
       } else {
         console.log('Нельзя удалить канал');
