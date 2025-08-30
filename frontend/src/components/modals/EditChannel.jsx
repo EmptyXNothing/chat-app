@@ -1,15 +1,15 @@
 import { closeModal } from '../../slices/modalSlice.js';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserContext } from '../../contexts/UserProvider.jsx';
 import axios from 'axios';
 import ERRORS from '../../errors.js';
+import { useUser } from '../../hooks/useUser.jsx';
 
 const EditChannelModal = () => {
   const dispatch = useDispatch();
   const [input, setInput] = useState('');
   const [error, setError] = useState(null);
-  const { headers } = useContext(UserContext);
+  const { headers } = useUser();
   const { data } = useSelector((state) => state.modal);
 
   const handleInput = (e) => {

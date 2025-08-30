@@ -1,19 +1,20 @@
 import '../styles/App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 import Login from '../pages/Login.jsx';
-import UserProvider, { UserContext } from '../contexts/UserProvider.jsx';
+import UserProvider from '../contexts/UserProvider.jsx';
 import Main from '../pages/Main.jsx';
-import { useContext } from 'react';
+
 import Header from '../components/Header.jsx';
 import SignUp from '../pages/SignUp.jsx';
+import { useUser } from '../hooks/useUser.jsx';
 
 const MainPrivateRoute = ({ children }) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   return user ? children : <Navigate to="/login" />;
 };
 
 const AuthenticationPrivateRoute = ({ children }) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   return user ? <Navigate to="/" /> : children;
 };
 

@@ -2,12 +2,12 @@ import '../styles/App.css';
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { UserContext } from '../contexts/UserProvider.jsx';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useUser } from '../hooks/useUser';
 
 const MessagesForm = () => {
   const { currentChannelId } = useSelector((state) => state.channels);
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const [input, setInput] = useState('');
   const inputRef = useRef();
 

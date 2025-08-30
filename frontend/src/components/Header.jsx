@@ -1,11 +1,10 @@
 import '../styles/App.css';
-import { UserContext } from '../contexts/UserProvider.jsx';
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../hooks/useUser.jsx';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { logOut, user } = useContext(UserContext);
+  const { logOut, user } = useUser();
 
   return (
     <div className="header">

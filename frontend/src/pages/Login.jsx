@@ -2,9 +2,8 @@ import '../styles/Login.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { UserContext } from '../contexts/UserProvider.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useUser } from '../hooks/useUser.jsx';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -19,7 +18,7 @@ const SignupSchema = Yup.object().shape({
 
 const Login = () => {
   const navigate = useNavigate();
-  const { logIn } = useContext(UserContext);
+  const { logIn } = useUser();
   const formik = useFormik({
     initialValues: {
       username: '',

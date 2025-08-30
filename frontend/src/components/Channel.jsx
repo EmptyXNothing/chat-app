@@ -1,67 +1,60 @@
-import '../styles/App.css';
-import { useSelector } from 'react-redux';
-import { actions } from '../slices/channelsSlice.js';
-import { useDispatch } from 'react-redux';
-import EditIcon from '../assets/edit.svg';
-import DeleteIcon from '../assets/delete.svg';
-import { UserContext } from '../contexts/UserProvider.jsx';
-import { useContext } from 'react';
-import axios from 'axios';
-import { openModal } from '../slices/modalSlice';
-import { selectors } from '../slices/channelsSlice';
+import "../styles/App.css";
+import { useDispatch } from "react-redux";
+import EditIcon from "../assets/edit.svg";
+import DeleteIcon from "../assets/delete.svg";
+import { openModal } from "../slices/modalSlice";
+import { useChannelStore } from "../store/channelStore";
+import axios from "axios";
+import { useCallback } from "react";
+import { useUser } from "../hooks/useUser";
 
-const Channel = (props) => {
-  const channels = useSelector(selectors.selectAll);
-  const { channel } = props;
+const Channel = ({ channel }) => {
+  const { headers } = useUser();
   const dispatch = useDispatch();
-  const { currentChannelId } = useSelector((state) => state.channels);
-  const style = channel.id === currentChannelId ? 'current channel' : 'channel';
-  const { headers } = useContext(UserContext);
+  const { currentChannel, setCurrentChannel, setFirstChannel } = useChannelStore();
+  const style = channel.id === currentChannel?.id ? "current channel" : "channel";
 
-  const handleDeleteChannel = async () => {
-    try {
-      if (channel.removable) {
-        await axios.delete(`/api/v1/channels/${channel.id}`, {
-          headers,
-        });
-        if (currentChannelId === channel.id) {
-          const firstChannel = channels[0]
-          const { id, name } = firstChannel
-          dispatch(actions.setCurrentChannel(id));
-          dispatch(actions.setCurrentChannelName(name));
+  const deleteChannel = useCallback(
+    async (channel) => {
+      try {
+        if (channel.removable) {
+          await axios.delete(`/api/v1/channels/${channel.id}`, { headers });
+          if (currentChannel?.id === channel.id) {
+            setFirstChannel()
+          }
+        } else {
+          console.log('Нельзя удалить канал');
         }
-      } else {
-        console.log('Нельзя удалить канал');
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    },
+    [currentChannel, headers]
+  );
 
   return (
     <div className={style}>
       <div
         className="channel-name"
         onClick={() => {
-          dispatch(actions.setCurrentChannelName(channel.name));
-          dispatch(actions.setCurrentChannel(channel.id));
+          setCurrentChannel(channel);
         }}
       >
         <span>
           {channel.name.length > 7
-            ? channel.name.slice(0, 7) + '...'
+            ? channel.name.slice(0, 7) + "..."
             : channel.name}
         </span>
       </div>
       <div className="channel-buttons">
         <button
           onClick={() =>
-            dispatch(openModal({ type: 'editChannel', data: channel }))
+            dispatch(openModal({ type: "editChannel", data: channel }))
           }
         >
           <img src={EditIcon} alt="edit channel" />
         </button>
-        <button onClick={async () => await handleDeleteChannel()}>
+        <button onClick={async () => await deleteChannel(channel)}>
           <img src={DeleteIcon} alt="delete channel" />
         </button>
       </div>

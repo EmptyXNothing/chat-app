@@ -1,60 +1,53 @@
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../slices/channelsSlice';
+import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
+import axios from 'axios';
+import { useChannelStore } from '../store/channelStore';
 
-const useChannels = () => {
-  const [channels, setChannels] = useState([]);
-  const [currentChannel, setCurrentChannel] = useState()
-  const dispatch = useDispatch();
+const useChannels = (headers) => {
+  const { setChannels, addChannel, renameChannel, removeChannel, setFirstChannel } = useChannelStore();
+  const currentChannel = useChannelStore(state => state.currentChannel);
 
+  // создаём сокет один раз
+  const socketRef = useRef(null);
+  if (!socketRef.current) {
+    socketRef.current = io();
+  }
+  const socket = socketRef.current;
+
+
+  // загрузка каналов с API (только один раз при монтировании или смене headers)
   useEffect(() => {
     const fetchData = async () => {
-      setChannels(() => useSelector(selectors.selectAll));
-      socket.timeout(3000).on('newChannel', (arg) => {
-        setChannels((channels) => [...channels, arg]);
-      });
-
-      socket.timeout(3000).on('removeChannel', ({ id }) => {
-        if (currentChannel.id === id) {
-          switchToFirstChannel()
-        }
-        setChannels((channels) => channels.filter((channel) => channel.id !== id))
-      });
-
-      socket.timeout(3000).on('renameChannel', (editedChannel) => {
-        setChannels((channels) => channels.map((channel) => channel.id === editedChannel.id ? editedChannel : channel))
-        // dispatch(
-        //   channelsActions.editChannel({
-        //     id: channel.id,
-        //     changes: channel,
-        //   })
-        // );
-      });
-
-      const channelsResponse = await axios.get('/api/v1/channels', {
-        headers: headers,
-      });
-    };
-  }, []);
-
-  const switchToFirstChannel = () => {
-    setCurrentChannel(channels[0]);
-  };
-
-  const deleteChannel = async (channel) => {
-    try {
-      if (channel.removable) {
-        await axios.delete(`/api/v1/channels/${channel.id}`, {
-          headers,
-        });
-        if (currentChannel.id === channel.id) {
-          switchToFirstChannel();
-        }
-      } else {
-        console.log('Нельзя удалить канал');
+      try {
+        const response = await axios.get('/api/v1/channels', { headers });
+        const channelsData = response.data;
+        setChannels(channelsData);
+        setFirstChannel();
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    };
+    fetchData();
+  }, [headers]);
+
+  // подписка на события сокета
+  useEffect(() => {
+    socket.on('newChannel', (arg) => addChannel(arg));
+    socket.on('removeChannel', ({ id }) => {
+      removeChannel(id);
+      if (id === currentChannel.id) {
+        setFirstChannel();
+      } 
+    });
+    socket.on('renameChannel', (editedChannel) => renameChannel(editedChannel));
+
+    return () => {
+      socket.off('newChannel');
+      socket.off('removeChannel');
+      socket.off('renameChannel');
+    };
+  }, [socket, currentChannel]);
 };
+
+
+export default useChannels;
