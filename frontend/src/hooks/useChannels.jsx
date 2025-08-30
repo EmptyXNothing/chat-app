@@ -4,7 +4,7 @@ import { selectors, actions } from '../slices/channelsSlice';
 
 const useChannels = () => {
   const [channels, setChannels] = useState([]);
-  const [currentChannel, setCurrentChannel] = useState()
+  const [currentChannel, setCurrentChannel] = useState();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -16,19 +16,19 @@ const useChannels = () => {
 
       socket.timeout(3000).on('removeChannel', ({ id }) => {
         if (currentChannel.id === id) {
-          switchToFirstChannel()
+          switchToFirstChannel();
         }
-        setChannels((channels) => channels.filter((channel) => channel.id !== id))
+        setChannels((channels) =>
+          channels.filter((channel) => channel.id !== id)
+        );
       });
 
       socket.timeout(3000).on('renameChannel', (editedChannel) => {
-        setChannels((channels) => channels.map((channel) => channel.id === editedChannel.id ? editedChannel : channel))
-        // dispatch(
-        //   channelsActions.editChannel({
-        //     id: channel.id,
-        //     changes: channel,
-        //   })
-        // );
+        setChannels((channels) =>
+          channels.map((channel) =>
+            channel.id === editedChannel.id ? editedChannel : channel
+          )
+        );
       });
 
       const channelsResponse = await axios.get('/api/v1/channels', {

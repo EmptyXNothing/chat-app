@@ -3,8 +3,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserProvider.jsx';
-import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import ERRORS from '../errors.js';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -19,17 +20,26 @@ const SignupSchema = Yup.object().shape({
 
 const Login = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const { logIn } = useContext(UserContext);
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
+    validateOnChange: false,
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      const { data } = await axios.post('/api/v1/login', values);
-      logIn(data);
-      navigate('/');
+      setError(() => null)
+      try {
+        const { data } = await axios.post('/api/v1/login', values);
+        logIn(data);
+        navigate('/');
+      } catch (e) {
+        if (e.status === 401) setError(() => ERRORS.login);
+        else if (e.code === 'ERR_NETWORK') setError(() => ERRORS.network);
+        else setError(() => ERRORS.unknown);
+      }
     },
   });
   return (
@@ -56,9 +66,12 @@ const Login = () => {
             value={formik.values.password}
           />
           <p className="error">{formik.errors.password}</p>
+          {error && <div className="validation">{error}</div>}
         </div>
         <div className="btn">
           <button type="submit">Log in</button>
+          <span>No account? </span>
+          <Link to="/signup">Sign up</Link>
         </div>
       </form>
     </div>
