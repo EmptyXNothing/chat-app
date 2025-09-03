@@ -1,6 +1,5 @@
-import { closeModal } from '../../slices/modalSlice.js';
 import Modal from 'react-modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useModalStore } from '../../store/modalStore.js';
 import AddChannelModal from './AddChannel.jsx';
 import EditChannelModal from './EditChannel.jsx';
 
@@ -17,15 +16,14 @@ const customStyles = {
 };
 
 const ModalWindow = () => {
-  const dispatch = useDispatch();
-  const { visible, type } = useSelector((state) => state.modal);
+  const { modal, closeModal } = useModalStore();
 
   const handleClose = () => {
-    dispatch(closeModal());
+    closeModal()
   };
 
   const getCurrentModal = () => {
-    switch (type) {
+    switch (modal.type) {
       case 'addChannel':
         return <AddChannelModal />;
       case 'editChannel':
@@ -37,7 +35,7 @@ const ModalWindow = () => {
 
   return (
     <Modal
-      isOpen={visible}
+      isOpen={modal.visible}
       onRequestClose={() => handleClose()}
       style={customStyles}
       contentLabel="Example Modal"

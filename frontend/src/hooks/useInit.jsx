@@ -1,27 +1,39 @@
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
+import { useMessageStore } from '../store/messageStore';
 import { useChannelStore } from '../store/channelStore';
 
-const useChannels = (headers) => {
-  const { setChannels, addChannel, renameChannel, removeChannel, setFirstChannel } = useChannelStore();
-  const currentChannel = useChannelStore(state => state.currentChannel);
+const useInit = (headers) => {
+  const {
+    setChannels,
+    addChannel,
+    renameChannel,
+    removeChannel,
+    setFirstChannel,
+  } = useChannelStore();
+  const currentChannel = useChannelStore((state) => state.currentChannel);
+  const { setMessages, addMessage } = useMessageStore();
 
-  // создаём сокет один раз
   const socketRef = useRef(null);
   if (!socketRef.current) {
     socketRef.current = io();
   }
   const socket = socketRef.current;
 
-
-  // загрузка каналов с API (только один раз при монтировании или смене headers)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/v1/channels', { headers });
-        const channelsData = response.data;
+        const channelsResponse = await axios.get('/api/v1/channels', {
+          headers,
+        });
+        const messagesResponse = await axios.get('/api/v1/messages', {
+          headers,
+        });
+        const channelsData = channelsResponse.data;
+        const messagesData = messagesResponse.data;
         setChannels(channelsData);
+        setMessages(messagesData);
         setFirstChannel();
       } catch (e) {
         console.error(e);
@@ -30,24 +42,24 @@ const useChannels = (headers) => {
     fetchData();
   }, [headers]);
 
-  // подписка на события сокета
   useEffect(() => {
+    socket.on('newMessage', (arg) => addMessage(arg));
     socket.on('newChannel', (arg) => addChannel(arg));
     socket.on('removeChannel', ({ id }) => {
       removeChannel(id);
       if (id === currentChannel.id) {
         setFirstChannel();
-      } 
+      }
     });
     socket.on('renameChannel', (editedChannel) => renameChannel(editedChannel));
 
     return () => {
+      socket.off('newMessage');
       socket.off('newChannel');
       socket.off('removeChannel');
       socket.off('renameChannel');
     };
-  }, [socket, currentChannel]);
+  }, [socket]);
 };
 
-
-export default useChannels;
+export default useInit;

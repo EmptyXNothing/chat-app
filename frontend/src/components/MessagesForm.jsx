@@ -1,19 +1,19 @@
 import '../styles/App.css';
 import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useChannelStore } from '../store/channelStore';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
 
 const MessagesForm = () => {
-  const { currentChannelId } = useSelector((state) => state.channels);
+  const { currentChannel } = useChannelStore();
   const { user } = useUser();
   const [input, setInput] = useState('');
   const inputRef = useRef();
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [currentChannelId]);
+  }, [currentChannel]);
 
   const handleInput = (e) => {
     setInput(() => e.target.value);
@@ -23,7 +23,7 @@ const MessagesForm = () => {
     e.preventDefault();
     const newMessage = {
       body: input,
-      channelId: currentChannelId,
+      channelId: currentChannel.id,
       username: user.username,
     };
     axios

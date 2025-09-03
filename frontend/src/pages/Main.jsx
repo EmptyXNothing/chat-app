@@ -4,12 +4,12 @@ import MessagesForm from "../components/MessagesForm.jsx";
 import Messages from "../components/Messages.jsx";
 import ModalWindow from "../components/modals/ModalRoot.jsx";
 import { useUser } from "../hooks/useUser.jsx";
-import useChannels from "../hooks/useChannels.jsx";
+import useInit from "../hooks/useInit.jsx";
 import { useChannelStore } from "../store/channelStore.js";
 
 const Main = () => {
   const { headers } = useUser();
-  useChannels(headers);
+  useInit(headers);
   const { currentChannel } = useChannelStore();
 
   return (

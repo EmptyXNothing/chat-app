@@ -1,12 +1,11 @@
-import { closeModal } from '../../slices/modalSlice.js';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import ERRORS from '../../errors.js';
 import { useUser } from '../../hooks/useUser.jsx';
+import { useModalStore } from '../../store/modalStore.js';
 
 const AddChannelModal = () => {
-  const dispatch = useDispatch();
+  const {closeModal } = useModalStore()
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
   const { headers } = useUser();
@@ -31,7 +30,7 @@ const AddChannelModal = () => {
         headers: headers,
       });
       setInput(() => '');
-      dispatch(closeModal());
+      closeModal()
     } catch (e) {
       setError(() => e.message);
     }
