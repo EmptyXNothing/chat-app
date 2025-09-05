@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useMessageStore } from '../store/messageStore';
 import { useChannelStore } from '../store/channelStore';
+import routes from '../routes';
 
 const useInit = (headers) => {
   const {
@@ -24,10 +25,10 @@ const useInit = (headers) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const channelsResponse = await axios.get('/api/v1/channels', {
+        const channelsResponse = await axios.get(routes.channels(), {
           headers,
         });
-        const messagesResponse = await axios.get('/api/v1/messages', {
+        const messagesResponse = await axios.get(routes.messages(), {
           headers,
         });
         const channelsData = channelsResponse.data;

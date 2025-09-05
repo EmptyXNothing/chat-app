@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser.jsx';
+import routes from '../routes.js';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -16,7 +17,7 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const Login = () => {
+const LogIn = () => {
   const navigate = useNavigate();
   const { logIn } = useUser();
   const formik = useFormik({
@@ -26,9 +27,9 @@ const Login = () => {
     },
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      const { data } = await axios.post('/api/v1/login', values);
+      const { data } = await axios.post(routes.logIn(), values);
       logIn(data);
-      navigate('/');
+      navigate(routes.mainPage());
     },
   });
   return (
@@ -64,4 +65,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LogIn;

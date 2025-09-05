@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useCallback } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useModalStore } from '../store/modalStore';
+import routes from '../routes';
 
 const Channel = ({ channel }) => {
   const { openModal } = useModalStore();
@@ -19,7 +20,7 @@ const Channel = ({ channel }) => {
     async (channel) => {
       try {
         if (channel.removable) {
-          await axios.delete(`/api/v1/channels/${channel.id}`, { headers });
+          await axios.delete(routes.channel(channel.id), { headers });
           if (currentChannel?.id === channel.id) {
             setFirstChannel();
           }

@@ -1,6 +1,7 @@
 import '../styles/App.css';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser.jsx';
+import routes from '../routes.js';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Header = () => {
       { user ? <button
         onClick={() => {
           logOut();
-          navigate('/login');
+          navigate(routes.logInPage());
         }}
       >
         Log out

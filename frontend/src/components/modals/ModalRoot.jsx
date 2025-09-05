@@ -19,7 +19,7 @@ const ModalWindow = () => {
   const { modal, closeModal } = useModalStore();
 
   const handleClose = () => {
-    closeModal()
+    closeModal();
   };
 
   const getCurrentModal = () => {
@@ -29,7 +29,7 @@ const ModalWindow = () => {
       case 'editChannel':
         return <EditChannelModal />;
       default:
-        return null
+        return null;
     }
   };
 

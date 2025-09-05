@@ -3,6 +3,7 @@ import axios from 'axios';
 import ERRORS from '../../errors.js';
 import { useUser } from '../../hooks/useUser.jsx';
 import { useModalStore } from '../../store/modalStore.js';
+import routes from '../../routes.js';
 
 const AddChannelModal = () => {
   const {closeModal } = useModalStore()
@@ -26,7 +27,7 @@ const AddChannelModal = () => {
     }
     try {
       const newChannel = { name: input };
-      await axios.post('/api/v1/channels', newChannel, {
+      await axios.post(routes.channels(), newChannel, {
         headers: headers,
       });
       setInput(() => '');

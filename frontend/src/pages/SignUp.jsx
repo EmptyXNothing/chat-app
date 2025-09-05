@@ -2,6 +2,7 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import routes from '../routes';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -31,7 +32,7 @@ const SignUp = () => (
       validationSchema={SignupSchema}
       onSubmit={async ({ username, password}) => {
         try{
-          const response = await axios.post('/api/v1/signup', { username: username, password: password })
+          const response = await axios.post(routes.signUp(), { username: username, password: password })
           console.log(response)
         } catch (e) {
           console.log(e)

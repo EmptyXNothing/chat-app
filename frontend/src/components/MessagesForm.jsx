@@ -4,10 +4,11 @@ import { useChannelStore } from '../store/channelStore';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
+import routes from '../routes';
 
 const MessagesForm = () => {
   const { currentChannel } = useChannelStore();
-  const { user } = useUser();
+  const { user, headers} = useUser();
   const [input, setInput] = useState('');
   const inputRef = useRef();
 
@@ -27,10 +28,8 @@ const MessagesForm = () => {
       username: user.username,
     };
     axios
-      .post('/api/v1/messages', newMessage, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
+      .post(routes.messages(), newMessage, {
+        headers: headers,
       })
       .then((response) => {
         console.log(response.data);
