@@ -7,6 +7,7 @@ import Header from '../components/Header.jsx';
 import SignUp from '../pages/SignUp.jsx';
 import { useUser } from '../hooks/useUser.jsx';
 import routes from '../routes.js';
+import { ToastContainer } from 'react-toastify';
 
 const MainPrivateRoute = ({ children }) => {
   const { user } = useUser();
@@ -23,6 +24,7 @@ const App = () => {
     <>
       <UserProvider>
         <BrowserRouter>
+          <ToastContainer />
           <Header />
           <div className="main">
             <Routes>
@@ -51,7 +53,10 @@ const App = () => {
                 }
               />
 
-              <Route path={routes.notFound()} element={<h1>Такой страницы нет!</h1>} />
+              <Route
+                path={routes.notFound()}
+                element={<h1>Такой страницы нет!</h1>}
+              />
             </Routes>
           </div>
         </BrowserRouter>

@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import routes from '../routes';
+import notify from '../utils/notify';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -32,10 +33,9 @@ const SignUp = () => (
       validationSchema={SignupSchema}
       onSubmit={async ({ username, password}) => {
         try{
-          const response = await axios.post(routes.signUp(), { username: username, password: password })
-          console.log(response)
+          await axios.post(routes.signUp(), { username: username, password: password })
         } catch (e) {
-          console.log(e)
+          notify(e.message, 'error')
         }
       }}
     >

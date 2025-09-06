@@ -7,6 +7,7 @@ import { useCallback } from 'react';
 import { useUser } from '../hooks/useUser';
 import { useModalStore } from '../store/modalStore';
 import routes from '../routes';
+import notify from '../utils/notify';
 
 const Channel = ({ channel }) => {
   const { openModal } = useModalStore();
@@ -25,10 +26,10 @@ const Channel = ({ channel }) => {
             setFirstChannel();
           }
         } else {
-          console.log('Нельзя удалить канал');
+          notify('Нельзя удалить канал', 'warning');
         }
       } catch (e) {
-        console.log(e);
+        notify(e.message, 'error');
       }
     },
     [currentChannel, headers]

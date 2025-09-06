@@ -8,7 +8,7 @@ import routes from '../routes';
 
 const MessagesForm = () => {
   const { currentChannel } = useChannelStore();
-  const { user, headers} = useUser();
+  const { user, headers } = useUser();
   const [input, setInput] = useState('');
   const inputRef = useRef();
 
@@ -27,13 +27,9 @@ const MessagesForm = () => {
       channelId: currentChannel.id,
       username: user.username,
     };
-    axios
-      .post(routes.messages(), newMessage, {
-        headers: headers,
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
+    axios.post(routes.messages(), newMessage, {
+      headers: headers,
+    });
     setInput(() => '');
   };
   return (

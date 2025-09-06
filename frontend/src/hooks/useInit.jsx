@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useMessageStore } from '../store/messageStore';
 import { useChannelStore } from '../store/channelStore';
 import routes from '../routes';
+import notify from '../utils/notify';
 
 const useInit = (headers) => {
   const {
@@ -37,7 +38,7 @@ const useInit = (headers) => {
         setMessages(messagesData);
         setFirstChannel();
       } catch (e) {
-        console.error(e);
+        notify(e.message, 'error');
       }
     };
     fetchData();

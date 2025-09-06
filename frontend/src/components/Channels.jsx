@@ -17,7 +17,7 @@ const Channels = () => {
         </button>
       </div>
       {channels.map((channel) => (
-        <Channel channel={channel} />
+        <Channel channel={channel} key={channel.id}/>
       ))}
     </div>
   );
