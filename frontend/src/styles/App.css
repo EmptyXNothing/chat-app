@@ -44,9 +44,12 @@
 
 .channels {
   width: 20%;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0.5em;
   border-right: 1px solid rgb(235, 230, 230);
   background-color: #1a1a1a;
+  max-height: 87.51vh;
 }
 
 .channel {
@@ -62,13 +65,14 @@
   align-items: center;
   padding: 1em;
   width: 100%;
+  max-height: 87vh;
+  gap: 5px;
 }
 
 .messages {
   display: flex;
   flex-direction: column;
   justify-content: end;
-  height: 100%;
   gap: 0.2em;
 }
 
@@ -83,15 +87,17 @@
 }
 
 .messages-form {
-  height: 32px;
+  height: 4vh;
+  width: 50vw;
 }
 
 .chat-content {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
   justify-content: space-between;
   height: 100%;
-  width: 80%;
+  width: 100%;
   gap: 1em;
 }
 
@@ -177,7 +183,6 @@
 
 .modal {
   height: 100%;
-
 }
 
 .header-info {

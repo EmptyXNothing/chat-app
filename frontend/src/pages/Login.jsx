@@ -2,9 +2,10 @@ import '../styles/Login.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../hooks/useUser.jsx';
 import routes from '../routes.js';
+import { useState } from 'react';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -18,6 +19,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LogIn = () => {
+  const [ error, setError] = useState()
   const navigate = useNavigate();
   const { logIn } = useUser();
   const formik = useFormik({
@@ -28,9 +30,11 @@ const LogIn = () => {
     validateOnChange: false,
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      const { data } = await axios.post(routes.logIn(), values);
+      try{const { data } = await axios.post(routes.logIn(), values);
       logIn(data);
-      navigate(routes.mainPage());
+      navigate(routes.mainPage());} catch(e) {
+        setError(() => e.message)
+      }
     },
   });
   return (
@@ -62,7 +66,7 @@ const LogIn = () => {
         <div className="btn">
           <button type="submit">Log in</button>
           <span>No account? </span>
-          <Link to="/signup">Sign up</Link>
+          <Link to={routes.signUpPage()}>Sign up</Link>
         </div>
       </form>
     </div>
