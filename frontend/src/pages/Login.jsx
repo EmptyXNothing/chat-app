@@ -25,6 +25,7 @@ const LogIn = () => {
       username: '',
       password: '',
     },
+    validateOnChange: false,
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       const { data } = await axios.post(routes.logIn(), values);
@@ -56,9 +57,12 @@ const LogIn = () => {
             value={formik.values.password}
           />
           <p className="error">{formik.errors.password}</p>
+          {error && <div className="validation">{error}</div>}
         </div>
         <div className="btn">
           <button type="submit">Log in</button>
+          <span>No account? </span>
+          <Link to="/signup">Sign up</Link>
         </div>
       </form>
     </div>
