@@ -1,15 +1,15 @@
-import { closeModal } from '../../slices/modalSlice.js';
-import { useState, useContext } from 'react';
-import { useDispatch } from 'react-redux';
-import { UserContext } from '../../contexts/UserProvider.jsx';
+import { useState } from 'react';
 import axios from 'axios';
 import ERRORS from '../../errors.js';
+import { useUser } from '../../hooks/useUser.jsx';
+import { useModalStore } from '../../store/modalStore.js';
+import routes from '../../routes.js';
 
 const AddChannelModal = () => {
-  const dispatch = useDispatch();
+  const {closeModal } = useModalStore()
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
-  const { headers } = useContext(UserContext);
+  const { headers } = useUser();
 
   const handleInput = (e) => {
     setInput(() => e.target.value);
@@ -27,11 +27,11 @@ const AddChannelModal = () => {
     }
     try {
       const newChannel = { name: input };
-      const response = await axios.post('/api/v1/channels', newChannel, {
+      await axios.post(routes.channels(), newChannel, {
         headers: headers,
       });
       setInput(() => '');
-      dispatch(closeModal());
+      closeModal()
     } catch (e) {
       setError(() => e.message);
     }

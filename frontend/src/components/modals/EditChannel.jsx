@@ -1,16 +1,17 @@
-import { closeModal } from '../../slices/modalSlice.js';
-import { useState, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { UserContext } from '../../contexts/UserProvider.jsx';
+import { useState } from 'react';
 import axios from 'axios';
 import ERRORS from '../../errors.js';
+import { useUser } from '../../hooks/useUser.jsx';
+import { useChannelStore } from "../../store/channelStore";
+import { useModalStore } from '../../store/modalStore.js';
+import routes from '../../routes.js';
 
 const EditChannelModal = () => {
-  const dispatch = useDispatch();
   const [input, setInput] = useState('');
   const [error, setError] = useState(null);
-  const { headers } = useContext(UserContext);
-  const { data } = useSelector((state) => state.modal);
+  const { headers } = useUser();
+  const { modal, closeModal } = useModalStore();
+  const { currentChannel, setCurrentChannel } = useChannelStore();
 
   const handleInput = (e) => {
     setInput(() => e.target.value);
@@ -27,12 +28,16 @@ const EditChannelModal = () => {
       return;
     }
     try {
-      const editedChannel = { name: input };
-      await axios.patch(`/api/v1/channels/${data.id}`, editedChannel, {
+      const changes = { name: input };
+      const response = await axios.patch(routes.channel(modal.data.id), changes, {
         headers,
       });
+      const editedChannel = response.data
+      if (currentChannel.id === editedChannel.id){
+        setCurrentChannel(editedChannel)
+      }
       setInput(() => '');
-      dispatch(closeModal());
+      closeModal();
     } catch (e) {
       setError(() => e.message);
     }
@@ -41,7 +46,7 @@ const EditChannelModal = () => {
   return (
     <div className="edit-channel-name-form">
       <form onSubmit={handleSubmit}>
-        <h2>{data.name}</h2>
+        <h2>{modal.data.name}</h2>
         <div className="form-content">
           <div className="flex">
             <input

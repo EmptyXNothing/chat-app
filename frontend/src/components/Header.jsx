@@ -1,23 +1,27 @@
 import '../styles/App.css';
-import { UserContext } from '../contexts/UserProvider.jsx';
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../hooks/useUser.jsx';
+import routes from '../routes.js';
+import logoutSrc from '../assets/logout.svg';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { logOut, user } = useContext(UserContext);
+  const { logOut, user } = useUser();
 
   return (
     <div className="header">
       <h3>Chat app</h3>
-      { user ? <button
+      { user ? <div className='header-info'>
+        <span>{user.username}</span>
+        <button
         onClick={() => {
           logOut();
-          navigate('/login');
+          navigate(routes.logInPage());
         }}
       >
-        Log out
-      </button> : null}
+        <img src={logoutSrc} alt="" />
+      </button>
+      </div> : null}
     </div>
   );
 };

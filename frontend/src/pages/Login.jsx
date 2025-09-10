@@ -2,10 +2,9 @@ import '../styles/Login.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { UserContext } from '../contexts/UserProvider.jsx';
-import { useNavigate, Link } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import ERRORS from '../errors.js';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../hooks/useUser.jsx';
+import routes from '../routes.js';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -18,10 +17,9 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const Login = () => {
+const LogIn = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const { logIn } = useContext(UserContext);
+  const { logIn } = useUser();
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -30,16 +28,9 @@ const Login = () => {
     validateOnChange: false,
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      setError(() => null)
-      try {
-        const { data } = await axios.post('/api/v1/login', values);
-        logIn(data);
-        navigate('/');
-      } catch (e) {
-        if (e.status === 401) setError(() => ERRORS.login);
-        else if (e.code === 'ERR_NETWORK') setError(() => ERRORS.network);
-        else setError(() => ERRORS.unknown);
-      }
+      const { data } = await axios.post(routes.logIn(), values);
+      logIn(data);
+      navigate(routes.mainPage());
     },
   });
   return (
@@ -78,4 +69,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LogIn;

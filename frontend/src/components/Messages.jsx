@@ -1,15 +1,23 @@
 import '../styles/App.css';
-import { useSelector } from 'react-redux';
-import { selectors } from '../slices/messagesSlice';
+import { useChannelStore } from '../store/channelStore';
+import { useMessageStore } from '../store/messageStore.js';
 
 const Messages = () => {
-  const messages = useSelector(selectors.selectAll)
-  const { currentChannelId } = useSelector((state) => state.channels);
-  const filteredMessages = messages.filter((message) => message.channelId === currentChannelId)
+  const { messages } = useMessageStore()
+  const { currentChannel } = useChannelStore();
+  const filteredMessages = messages.filter(
+    (message) => message.channelId === currentChannel.id
+  );
 
   return (
     <div className="messages">
-      {filteredMessages.map((message) => <p>{message.body}</p>)}
+      {filteredMessages.map((message) => (
+        <div className='message'>
+          <h4>{message.username}</h4>
+          <p>{message.body}</p>
+        </div>
+        
+      ))}
     </div>
   );
 };

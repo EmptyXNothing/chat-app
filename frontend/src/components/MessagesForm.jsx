@@ -1,19 +1,21 @@
 import '../styles/App.css';
 import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useChannelStore } from '../store/channelStore';
 import axios from 'axios';
-import { UserContext } from '../contexts/UserProvider.jsx';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useUser } from '../hooks/useUser';
+import routes from '../routes';
+import sendSrc from '../assets/send.svg';
 
 const MessagesForm = () => {
-  const { currentChannelId } = useSelector((state) => state.channels);
-  const { user } = useContext(UserContext);
+  const { currentChannel } = useChannelStore();
+  const { user, headers } = useUser();
   const [input, setInput] = useState('');
   const inputRef = useRef();
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [currentChannelId]);
+  }, [currentChannel]);
 
   const handleInput = (e) => {
     setInput(() => e.target.value);
@@ -23,18 +25,12 @@ const MessagesForm = () => {
     e.preventDefault();
     const newMessage = {
       body: input,
-      channelId: currentChannelId,
+      channelId: currentChannel.id,
       username: user.username,
     };
-    axios
-      .post('/api/v1/messages', newMessage, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
+    axios.post(routes.messages(), newMessage, {
+      headers: headers,
+    });
     setInput(() => '');
   };
   return (
@@ -46,8 +42,8 @@ const MessagesForm = () => {
           autoComplete="off"
           value={input}
           ref={inputRef}
-        ></input>
-        <button type="sumbit">Send</button>
+        />
+        {input.length > 0 && <button type="sumbit"><img src={sendSrc} alt="" /></button>}
       </form>
     </div>
   );
