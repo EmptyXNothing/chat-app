@@ -4,7 +4,6 @@ import { produce } from 'immer';
 export const useChannelStore = create((set, get) => ({
   channels: [],
   currentChannel: null,
-
   setChannels: (channels) => set({ channels }),
   addChannel: (channel) => set(produce(state => { state.channels.push(channel) })),
   removeChannel: (id) => set(produce(state => {

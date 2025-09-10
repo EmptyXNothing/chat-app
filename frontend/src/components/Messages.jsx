@@ -12,7 +12,11 @@ const Messages = () => {
   return (
     <div className="messages">
       {filteredMessages.map((message) => (
-        <p>{message.body}</p>
+        <div className='message'>
+          <h4>{message.username}</h4>
+          <p>{message.body}</p>
+        </div>
+        
       ))}
     </div>
   );

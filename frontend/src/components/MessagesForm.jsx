@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useUser } from '../hooks/useUser';
 import routes from '../routes';
+import sendSrc from '../assets/send.svg';
 
 const MessagesForm = () => {
   const { currentChannel } = useChannelStore();
@@ -41,8 +42,8 @@ const MessagesForm = () => {
           autoComplete="off"
           value={input}
           ref={inputRef}
-        ></input>
-        <button type="sumbit">Send</button>
+        />
+        {input.length > 0 && <button type="sumbit"><img src={sendSrc} alt="" /></button>}
       </form>
     </div>
   );

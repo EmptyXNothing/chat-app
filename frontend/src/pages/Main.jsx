@@ -16,11 +16,12 @@ const Main = () => {
     <div className="main-content">
       <Channels />
       <div className="chat">
-        <div className="chat-name">
-          <h3>{currentChannel?.name}</h3>
+        <h3>{currentChannel?.name}</h3>
+        <div className="chat-content">
+          <Messages />
+          <MessagesForm />
         </div>
-        <Messages />
-        <MessagesForm />
+        
       </div>
       <ModalWindow />
     </div>

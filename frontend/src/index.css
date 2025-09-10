@@ -25,6 +25,7 @@ a:hover {
 body {
   margin: 0;
   display: flex;
+  justify-content: center;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
@@ -36,16 +37,13 @@ h1 {
 }
 
 button{
-  background-color: #1a1a1a;
-  padding: 0.2em;
+  background-color: transparent;
+  border: none;
+  transition: 200ms;
 }
 
 button:hover {
-  border-color: rgb(235, 230, 230);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transform: scale(1.2);
 }
 
 @media (prefers-color-scheme: light) {
