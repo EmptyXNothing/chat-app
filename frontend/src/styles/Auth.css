@@ -5,19 +5,19 @@
   box-shadow: 0 0 5px rgb(235, 230, 230);
 }
 
-.username, .password {
+.field {
   display: flex;
   flex-direction: column;
   align-items:flex-start;
   gap: 3px;
-  padding: 0.5em;
+  padding: 0.5em 0;
 }
 
-.username label, .password label {
-  font-size: 1.5em;
+.field label {
+  font-size: 1.2em;
 }
 
-.username input, .password input {
+.field input {
   padding: 0.5em;
   border: 2px solid rgb(235, 230, 230);
   border-radius: 4px;
@@ -25,15 +25,22 @@
 
 .error {
   color: crimson;
-  height: 0.8em;
 }
 
 .btn {
-  padding: 0.5em;
+  padding: 0.5em 0;
 }
 
 .btn button {
+  width: 50%;
+  padding: 0.3em 0.6em;
   border: 3px solid rgb(235, 230, 230);
   border-radius: 10px;
   box-shadow: 0 0 5px rgb(235, 230, 230)
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em
 }
