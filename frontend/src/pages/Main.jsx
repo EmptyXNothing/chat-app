@@ -6,10 +6,12 @@ import ModalWindow from '../components/modals/ModalRoot.jsx';
 import { useUser } from '../hooks/useUser.jsx';
 import useInit from '../hooks/useInit.jsx';
 import { useChannelStore } from '../store/channelStore.js';
+import { useRef } from 'react';
 
 const Main = () => {
   const { headers } = useUser();
   useInit(headers);
+  const scrollContainer = useRef(null);
   const { currentChannel } = useChannelStore();
 
   return (
@@ -17,8 +19,8 @@ const Main = () => {
       <Channels />
       <div className="chat">
         <h3>{currentChannel?.name}</h3>
-        <div className="chat-content">
-          <Messages />
+        <div className="chat-content" ref={scrollContainer}>
+          <Messages scrollContainer={scrollContainer}/>
         </div>
         <MessagesForm />
       </div>
