@@ -1,6 +1,6 @@
 import '../styles/App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
-import LogIn from '../pages/LogIn.jsx';
+import LogIn from '../pages/Login.jsx';
 import UserProvider from '../contexts/UserProvider.jsx';
 import Main from '../pages/Main.jsx';
 import Header from '../components/Header.jsx';

@@ -1,10 +1,11 @@
-import '../styles/Login.css';
+import '../styles/Auth.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../hooks/useUser.jsx';
 import routes from '../routes.js';
+import { useState } from 'react';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -18,6 +19,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const LogIn = () => {
+  const [error, setError] = useState();
   const navigate = useNavigate();
   const { logIn } = useUser();
   const formik = useFormik({
@@ -28,15 +30,20 @@ const LogIn = () => {
     validateOnChange: false,
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
-      const { data } = await axios.post(routes.logIn(), values);
-      logIn(data);
-      navigate(routes.mainPage());
+      try {
+        const { data } = await axios.post(routes.logIn(), values);
+        logIn(data);
+        navigate(routes.mainPage());
+      } catch (e) {
+        setError(() => e.message);
+      }
     },
   });
   return (
     <div className="form">
+      <h2>Log in</h2>
       <form onSubmit={formik.handleSubmit}>
-        <div className="username">
+        <div className="field">
           <label htmlFor="username">Username</label>
           <input
             id="username"
@@ -47,7 +54,7 @@ const LogIn = () => {
           />
           <p className="error">{formik.errors.username}</p>
         </div>
-        <div className="password">
+        <div className="field">
           <label htmlFor="password">Password</label>
           <input
             id="password"
@@ -61,8 +68,10 @@ const LogIn = () => {
         </div>
         <div className="btn">
           <button type="submit">Log in</button>
-          <span>No account? </span>
-          <Link to="/signup">Sign up</Link>
+          <div>
+            <span>No account? </span>
+            <Link to={routes.signUpPage()}>Sign up</Link>
+          </div>
         </div>
       </form>
     </div>

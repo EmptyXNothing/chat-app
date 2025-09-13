@@ -1,9 +1,12 @@
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { useContext, React } from 'react';
+import { React } from 'react';
 import axios from 'axios';
 import routes from '../routes';
 import notify from '../utils/notify';
+import { useNavigate, Link } from 'react-router-dom';
+import { useUser } from '../hooks/useUser';
+import '../styles/Auth.css';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -21,9 +24,10 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-const SignUp = () => (
-  <div>
-    <h1>Signup</h1>
+const SignUp = () => {
+  const { logIn } = useUser();
+  const navigate = useNavigate();
+  return (
     <Formik
       initialValues={{
         username: '',
@@ -31,29 +35,62 @@ const SignUp = () => (
         confirmPassword: '',
       }}
       validationSchema={SignupSchema}
-      onSubmit={async ({ username, password}) => {
-        try{
-          await axios.post(routes.signUp(), { username: username, password: password })
+      onSubmit={async ({ username, password }) => {
+        try {
+          const response = await axios.post(routes.signUp(), {
+            username: username,
+            password: password,
+          });
+          navigate(routes.mainPage());
+          logIn(response.data);
         } catch (e) {
-          notify(e.message, 'error')
+          notify(e.message, 'error');
         }
       }}
     >
       {({ errors, touched }) => (
-        <Form>
-          <Field name="username" />
-          {errors.username && touched.username && <div>{errors.username}</div>}
-          <Field name="password" type="password" />
-          {errors.password && touched.password && <div>{errors.password}</div>}
-          <Field name="confirmPassword" type="password" />
-          {errors.confirmPassword && touched.confirmPassword && (
-            <div>{errors.confirmPassword}</div>
-          )}
-          <button type="submit">Submit</button>
+        <Form className="form">
+          <h2>Sign up</h2>
+          <div className="fields">
+            <div className="field">
+              <label htmlFor="username">Username</label>
+              <Field name="username" autoComplete="off" />
+              {errors.username && touched.username && (
+                <div className="error">{errors.username}</div>
+              )}
+            </div>
+            <div className="field">
+              <label htmlFor="password">Password</label>
+              <Field name="password" type="password" autoComplete="off" />
+              {errors.password && touched.password && (
+                <div className="error">{errors.password}</div>
+              )}
+            </div>
+
+            <div className="field">
+              <label htmlFor="confirmpPassword">Confirm password</label>
+              <Field
+                name="confirmPassword"
+                type="password"
+                autoComplete="off"
+              />
+              {errors.confirmPassword && touched.confirmPassword && (
+                <div className="error">{errors.confirmPassword}</div>
+              )}
+            </div>
+          </div>
+
+          <div className="btn">
+            <button type="submit">Submit</button>
+            <div>
+              <span>Have account? </span>
+              <Link to={routes.logInPage()}>Log in</Link>
+            </div>
+          </div>
         </Form>
       )}
     </Formik>
-  </div>
-);
+  );
+};
 
 export default SignUp;

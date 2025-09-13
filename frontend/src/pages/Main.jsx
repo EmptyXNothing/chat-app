@@ -1,11 +1,11 @@
-import "../styles/App.css";
-import Channels from "../components/Channels.jsx";
-import MessagesForm from "../components/MessagesForm.jsx";
-import Messages from "../components/Messages.jsx";
-import ModalWindow from "../components/modals/ModalRoot.jsx";
-import { useUser } from "../hooks/useUser.jsx";
-import useInit from "../hooks/useInit.jsx";
-import { useChannelStore } from "../store/channelStore.js";
+import '../styles/App.css';
+import Channels from '../components/Channels.jsx';
+import MessagesForm from '../components/MessagesForm.jsx';
+import Messages from '../components/Messages.jsx';
+import ModalWindow from '../components/modals/ModalRoot.jsx';
+import { useUser } from '../hooks/useUser.jsx';
+import useInit from '../hooks/useInit.jsx';
+import { useChannelStore } from '../store/channelStore.js';
 
 const Main = () => {
   const { headers } = useUser();
@@ -19,9 +19,8 @@ const Main = () => {
         <h3>{currentChannel?.name}</h3>
         <div className="chat-content">
           <Messages />
-          <MessagesForm />
         </div>
-        
+        <MessagesForm />
       </div>
       <ModalWindow />
     </div>

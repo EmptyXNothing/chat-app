@@ -11,8 +11,8 @@ const Messages = () => {
 
   return (
     <div className="messages">
-      {filteredMessages.map((message) => (
-        <div className='message'>
+      {filteredMessages.map((message, i) => (
+        <div className='message' key={i}>
           <h4>{message.username}</h4>
           <p>{message.body}</p>
         </div>

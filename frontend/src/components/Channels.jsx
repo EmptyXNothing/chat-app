@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 const Channels = () => {
   const { openModal } = useModalStore();
   const { channels } = useChannelStore();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const Channels = () => {
     <>
       {isMobile && !isOpen && (
         <button className="open-chats-btn" onClick={() => setIsOpen(true)}>
-          Открыть чаты
+          Open channels
         </button>
       )}
 
