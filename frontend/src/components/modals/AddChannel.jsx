@@ -5,7 +5,7 @@ import { useUser } from '../../hooks/useUser.jsx';
 import { useModalStore } from '../../store/modalStore.js';
 import routes from '../../routes.js';
 
-const AddChannelModal = () => {
+const AddChannelModal = ({ handleClose }) => {
   const {closeModal } = useModalStore()
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
@@ -38,7 +38,8 @@ const AddChannelModal = () => {
   };
 
   return (
-    <div className="add-channel-name-form">
+    <div className="content">
+      <h2>Добавить канал</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -47,8 +48,12 @@ const AddChannelModal = () => {
           ref={(input) => input?.focus()}
           placeholder="Channel name"
         />
-        <button type="sumbit">Submit</button>
-          {error && <div className="validation">{error}</div>}
+        <div className='btn'>
+          <button type="sumbit">Submit</button>
+          <button onClick={() => handleClose()}>close</button>
+        </div>
+        
+        {error && <div className="validation">{error}</div>}
       </form>
     </div>
   );

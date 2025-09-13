@@ -1,0 +1,18 @@
+.content form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.content h2 {
+    color: black;
+}
+
+.content input {
+    padding: 0.5em;
+}
+
+.content button {
+    background-color: rgb(108, 108, 108);
+    padding: 0.5em;
+}

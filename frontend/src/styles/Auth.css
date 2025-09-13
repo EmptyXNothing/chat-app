@@ -1,8 +1,24 @@
 .form {
-  border: 3px solid rgb(235, 230, 230);
+  border: 1px solid rgb(235, 230, 230);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 450px;
+  min-height: 300px;
   border-radius: 10px;
   padding: 2em;
+  height: 500px;
   box-shadow: 0 0 5px rgb(235, 230, 230);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80%;
+  gap: 0.3em
 }
 
 .field {
@@ -11,16 +27,19 @@
   align-items:flex-start;
   gap: 3px;
   padding: 0.5em 0;
+  width: 100%;
 }
 
 .field label {
   font-size: 1.2em;
+  
 }
 
 .field input {
   padding: 0.5em;
   border: 2px solid rgb(235, 230, 230);
   border-radius: 4px;
+  width: 100%;
 }
 
 .error {
@@ -29,18 +48,14 @@
 
 .btn {
   padding: 0.5em 0;
+  width: 100%;
 }
 
 .btn button {
-  width: 50%;
+  width: 30%;
   padding: 0.3em 0.6em;
   border: 3px solid rgb(235, 230, 230);
   border-radius: 10px;
   box-shadow: 0 0 5px rgb(235, 230, 230)
 }
 
-.fields {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em
-}

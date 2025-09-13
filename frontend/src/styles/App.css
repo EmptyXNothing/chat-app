@@ -89,7 +89,7 @@
 
 .messages-form {
   height: 4vh;
-  width: 50vw;
+  width: 80vw;
 }
 
 .chat-content {
@@ -162,14 +162,6 @@
   gap: 0.3em;
 }
 
-.edit-channel-name-form h2 {
-  color: #1a1a1a;
-}
-
-.edit-channel-name-form, .add-channel-name-form {
-  height: auto;
-}
-
 .channel-name {
   width: 100%;
 }
@@ -217,7 +209,6 @@
   height: 100%;
   background: #1a1a1a; /* фон обязательно, чтобы перекрывать */
   box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-  z-index: 1000;
   overflow-y: auto;
 }
 
