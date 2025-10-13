@@ -52,7 +52,7 @@ const LogIn = () => {
 
             <div className="field">
               <label htmlFor="password">Password</label>
-              <Field name="password" autoComplete="off" />
+              <Field name="password" type="password" autoComplete="off" />
               {errors.password && touched.password && (
                 <div className="error">{errors.password}</div>
               )}
